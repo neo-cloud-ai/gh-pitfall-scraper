@@ -1,0 +1,29 @@
+github_token: "ghp_xxx"
+
+repos:
+  - owner: vllm-project
+    name: vllm
+  - owner: sgl-project
+    name: sglang
+  - owner: NVIDIA
+    name: TensorRT-LLM
+  - owner: microsoft
+    name: DeepSpeed
+  - owner: pytorch
+    name: pytorch
+  - owner: huggingface
+    name: transformers
+
+keywords:
+  - "performance"
+  - "regression"
+  - "latency"
+  - "throughput"
+  - "OOM"
+  - "memory leak"
+  - "CUDA"
+  - "kernel"
+  - "NCCL"
+  - "hang"
+  - "deadlock"
+  - "kv cache"
