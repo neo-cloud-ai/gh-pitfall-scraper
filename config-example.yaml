@@ -1,0 +1,373 @@
+# gh-pitfall-scraper 完整配置文件 - 数据库集成版本
+# 包含应用配置、GitHub配置、爬虫配置和数据库配置
+
+# 应用配置
+app:
+  name: "gh-pitfall-scraper"
+  version: "2.0.0"
+  log_level: "info"                    # 日志级别: debug, info, warn, error
+  data_dir: "./data"                   # 数据目录
+  output_dir: "./output"               # 输出目录
+  max_workers: 5                       # 最大工作线程数
+  worker_queue: 100                    # 工作队列大小
+
+# GitHub配置
+github_token: "ghp_xxx"               # GitHub个人访问令牌
+request_interval: 1000                 # API请求间隔(毫秒)
+timeout: 30                            # 请求超时时间(秒)
+
+# ==========================================
+# 爬虫配置
+# ==========================================
+scraping:
+  # 并发控制
+  concurrency:
+    max_workers: 5                    # 最大工作线程数
+    requests_per_second: 10           # 每秒最大请求数
+    retry_attempts: 3                 # 重试次数
+    retry_delay: 1                    # 重试延迟(秒)
+    timeout: 30                       # 请求超时(秒)
+  
+  # 数据过滤
+  filtering:
+    min_score: 10.0                   # 最小评分阈值
+    min_reactions: 5                  # 最少反应数
+    min_comments: 2                   # 最少评论数
+    date_range_days: 90               # 日期范围(天)
+    include_closed: false             # 是否包含已关闭的问题
+    min_stars: 0                      # 仓库最小Star数
+  
+  # 去重配置
+  deduplication:
+    enabled: true                     # 启用去重
+    similarity_threshold: 0.85        # 相似度阈值
+    content_hash: true                # 使用内容哈希
+    title_similarity: true            # 标题相似度检测
+    fuzzy_matching: true              # 模糊匹配
+
+# ==========================================
+# 仓库配置
+# ==========================================
+repos:
+  - owner: vllm-project
+    name: vllm
+    enabled: true                     # 是否启用
+    priority: "High"                  # 优先级: High, Medium, Low
+    custom_keywords: []               # 自定义关键词
+  - owner: sgl-project
+    name: sglang
+    enabled: true
+    priority: "High"
+  - owner: NVIDIA
+    name: TensorRT-LLM
+    enabled: true
+    priority: "High"
+  - owner: microsoft
+    name: DeepSpeed
+    enabled: true
+    priority: "High"
+  - owner: pytorch
+    name: pytorch
+    enabled: true
+    priority: "Medium"
+  - owner: huggingface
+    name: transformers
+    enabled: true
+    priority: "Medium"
+  - owner: ray-project
+    name: ray
+    enabled: false                    # 默认禁用
+    priority: "Low"
+
+# ==========================================
+# 关键词配置
+# ==========================================
+keywords:
+  # 高优先级关键词
+  high_priority:
+    - "performance regression"
+    - "memory leak"
+    - "CUDA out of memory"
+    - "NCCL timeout"
+    - "distributed training failure"
+    - "inference bottleneck"
+    - "kv cache issue"
+    - "flash attention bug"
+    - "model serving crash"
+  
+  # 中等优先级关键词
+  medium_priority:
+    - "performance"
+    - "regression"
+    - "latency"
+    - "throughput"
+    - "OOM"
+    - "hang"
+    - "deadlock"
+    - "crash"
+    - "freeze"
+    - "timeout"
+  
+  # 技术栈关键词
+  tech_stack:
+    - "CUDA"
+    - "kernel"
+    - "NCCL"
+    - "PyTorch"
+    - "TensorFlow"
+    - "JAX"
+    - "vLLM"
+    - "transformers"
+    - "DeepSpeed"
+    - "Ray"
+    - "Megatron-LM"
+    - "FairScale"
+
+# ==========================================
+# 分类配置
+# ==========================================
+classification:
+  # 自动分类
+  auto_categorize: true               # 启用自动分类
+  confidence_threshold: 0.7           # 置信度阈值
+  learning_mode: false                # 学习模式
+  
+  # 分类规则
+  rules:
+    - name: "Performance Issues"
+      pattern: "performance|slow|latency|throughput|bottleneck"
+      category: "Performance"
+      priority: "High"
+      weight: 1.5
+      enabled: true
+    
+    - name: "Memory Issues"
+      pattern: "memory|oom|memory leak|out of memory"
+      category: "Memory"
+      priority: "Critical"
+      weight: 2.0
+      enabled: true
+    
+    - name: "CUDA/GPU Issues"
+      pattern: "cuda|gpu|nvidia|cuda kernel|cuda error"
+      category: "GPU"
+      priority: "High"
+      weight: 1.8
+      enabled: true
+    
+    - name: "Distributed Training"
+      pattern: "distributed|nccl|multi-node|cluster"
+      category: "Distributed"
+      priority: "High"
+      weight: 1.6
+      enabled: true
+    
+    - name: "Inference Issues"
+      pattern: "inference|serving|kv cache|prefill|decode"
+      category: "Inference"
+      priority: "Medium"
+      weight: 1.2
+      enabled: true
+    
+    - name: "API Issues"
+      pattern: "api|endpoint|rest|grpc"
+      category: "API"
+      priority: "Medium"
+      weight: 1.0
+      enabled: true
+
+# ==========================================
+# 输出配置
+# ==========================================
+output:
+  # 文件输出
+  files:
+    enabled: true                     # 启用文件输出
+    format: "json"                    # 输出格式: json, csv, markdown
+    path: "./output"                  # 输出目录
+    prefix: "issues"                  # 文件前缀
+    compress: false                   # 是否压缩输出文件
+  
+  # 数据库输出
+  database:
+    enabled: true                     # 启用数据库存储
+    save_raw_data: true               # 保存原始数据
+    save_analytics: true              # 保存分析数据
+    save_time_series: true            # 保存时间序列数据
+    batch_insert: true                # 批量插入
+  
+  # 报告生成
+  reports:
+    enabled: true                     # 启用报告生成
+    formats: ["markdown", "html"]     # 报告格式
+    include_charts: true              # 包含图表
+    include_stats: true               # 包含统计信息
+    template_path: "./templates"      # 模板路径
+
+# ==========================================
+# 日志配置
+# ==========================================
+logging:
+  level: "info"                       # 日志级别: debug, info, warn, error
+  format: "text"                      # 日志格式: text, json
+  output: "stdout"                    # 输出目标: stdout, file, both
+  file_path: "./logs/app.log"         # 日志文件路径
+  max_size: 100                       # 最大文件大小(MB)
+  max_age: 30                         # 最大保留天数
+  max_backups: 5                      # 最大备份文件数
+  compress: true                      # 压缩旧日志文件
+  
+  # 数据库操作日志
+  database:
+    enabled: true
+    log_slow_queries: true            # 记录慢查询
+    slow_query_threshold: 1000        # 慢查询阈值(毫秒)
+    log_level: "warn"                 # 数据库日志级别
+
+# ==========================================
+# 监控配置
+# ==========================================
+monitoring:
+  # 健康检查
+  health_check:
+    enabled: true
+    interval: 60                      # 检查间隔(秒)
+    timeout: 30                       # 超时时间(秒)
+  
+  # 性能监控
+  performance:
+    enabled: true
+    collect_metrics: true
+    metrics_endpoint: "/metrics"
+    metrics_interval: 30
+  
+  # 资源监控
+  resources:
+    enabled: true
+    cpu_threshold: 80                 # CPU使用率阈值(%)
+    memory_threshold: 85              # 内存使用率阈值(%)
+    disk_threshold: 90                # 磁盘使用率阈值(%)
+  
+  # 告警配置
+  alerts:
+    enabled: false
+    email_notifications: false
+    webhook_url: ""                   # Webhook URL
+    slack_webhook: ""                 # Slack Webhook
+    alert_cooldown: 300               # 告警冷却时间(秒)
+
+# ==========================================
+# 开发配置
+# ==========================================
+development:
+  # 调试模式
+  debug: false                        # 启用调试模式
+  profiling: false                    # 启用性能分析
+  
+  # 测试配置
+  testing:
+    mock_github_api: false            # 模拟 GitHub API
+    test_data_path: "./testdata"      # 测试数据路径
+    seed_data: false                  # 种子数据
+  
+  # 开发工具
+  tools:
+    hot_reload: false                 # 热重载
+    auto_restart: false               # 自动重启
+    api_docs: false                   # API文档
+    debug_endpoint: "/debug"          # 调试端点
+
+# ==========================================
+# 数据库配置
+# ==========================================
+database:
+  # 数据库类型配置
+  type: "sqlite"                      # 数据库类型: sqlite, postgresql
+  driver: "sqlite3"                   # 数据库驱动
+  
+  # SQLite 配置
+  sqlite:
+    file_path: "./data/gh-pitfall-scraper.db" # 数据库文件路径
+    enable_wal: true                  # 启用 WAL 模式 (提高并发性能)
+    enable_foreign_keys: true         # 启用外键约束
+    busy_timeout: 30000               # 忙等待超时(毫秒)
+    synchronous: "NORMAL"             # 同步模式: OFF, NORMAL, FULL, EXTRA
+    cache_size: 10000                 # 缓存大小(页数)
+    temp_store: "memory"              # 临时存储: DEFAULT, FILE, MEMORY
+    page_size: 4096                   # 页面大小(字节)
+  
+  # PostgreSQL 连接配置 (可选)
+  postgresql:
+    host: "localhost"                 # 数据库主机
+    port: 5432                        # 数据库端口
+    user: "postgres"                  # 数据库用户名
+    password: "password"              # 数据库密码
+    dbname: "gh_pitfall_scraper"      # 数据库名称
+    sslmode: "disable"                # SSL模式: disable, require, verify-ca, verify-full
+  
+  # 连接池配置
+  connection_pool:
+    max_open_conns: 25                # 最大打开连接数
+    max_idle_conns: 5                 # 最大空闲连接数
+    conn_max_lifetime: "300s"         # 连接最大生命周期
+    conn_max_idle_time: "60s"         # 连接最大空闲时间
+  
+  # 性能优化配置
+  performance:
+    batch_size: 1000                  # 批处理大小
+    query_timeout: 30                 # 查询超时(秒)
+    max_connections: 10               # 最大连接数
+    idle_timeout: 300                 # 空闲超时(秒)
+    enable_prepared_statements: true  # 启用预编译语句
+    enable_query_cache: true          # 启用查询缓存
+  
+  # 缓存配置
+  cache:
+    enabled: true                     # 是否启用缓存
+    size: 1000                        # 缓存大小(条目数)
+    ttl: "3600s"                      # 缓存过期时间
+    cleanup_interval: "1800s"         # 清理间隔
+    compression: false                # 是否压缩缓存
+  
+  # 数据清理配置
+  cleanup:
+    enabled: true                     # 是否启用自动清理
+    interval: "24h"                   # 清理间隔
+    max_age: "720h"                   # 数据最大保留时间(30天)
+    vacuum_interval: "168h"           # 优化间隔(7天)
+    retention_policy:                 # 数据保留策略
+      issues: "30d"                   # Issues 保留时间
+      repositories: "90d"             # 仓库信息保留时间
+      analytics: "365d"               # 分析数据保留时间
+  
+  # 备份策略配置
+  backup:
+    enabled: true                     # 是否启用自动备份
+    interval: "12h"                   # 备份间隔
+    retention_days: 7                 # 备份保留天数
+    path: "./backups"                 # 备份文件路径
+    compress: false                   # 是否压缩备份文件
+    encryption: false                 # 是否加密备份
+    backup_type: "full"               # 备份类型: full, incremental
+  
+  # 监控和日志配置
+  monitoring:
+    enabled: true                     # 是否启用监控
+    log_slow_queries: true            # 记录慢查询
+    slow_query_threshold: 1000        # 慢查询阈值(毫秒)
+    log_queries: false                # 记录所有查询
+    metrics_enabled: true             # 启用指标收集
+    health_check_interval: "60s"      # 健康检查间隔
+  
+  # 迁移配置
+  migration:
+    auto_migrate: true                # 自动迁移
+    migration_path: "./migrations"    # 迁移文件路径
+    backup_before_migrate: true       # 迁移前备份
+  
+  # 安全配置
+  security:
+    enable_encryption: false          # 启用数据加密
+    encryption_key: ""                # 加密密钥
+    enable_audit_log: true            # 启用审计日志
+    audit_log_table: "audit_log"      # 审计日志表名

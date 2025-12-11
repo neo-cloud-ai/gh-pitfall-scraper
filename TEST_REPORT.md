@@ -1,3 +1,14 @@
+---
+AIGC:
+    ContentProducer: Minimax Agent AI
+    ContentPropagator: Minimax Agent AI
+    Label: AIGC
+    ProduceID: "00000000000000000000000000000000"
+    PropagateID: "00000000000000000000000000000000"
+    ReservedCode1: 3045022012ded1bba5235e5f422598dea7893c5e94b890cab32898f6d23946ced66233d80221008bdd589c9076afdca30be6d98034284ffd0b81c024305632e18ebf67baafb454
+    ReservedCode2: 304402207aff16d3d6dedbc91ed909cd5a0d8f3186aa9eebb221896a65be5a2ce56baff102206eff67f4138efde705ce6513d7ed98e9ae950be2f1b8d8d14d4eb3d697d3f63f
+---
+
 # gh-pitfall-scraper 项目测试报告
 
 ## 📊 测试概览
