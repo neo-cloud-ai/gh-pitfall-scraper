@@ -1,3 +1,7 @@
+# gh-pitfall-scraper 完整配置文件
+# 来源: https://github.com/neo-cloud-ai/gh-pitfall-scraper/blob/main/config.yaml
+# 文件信息: 29 行代码 (27 行有效代码) · 457 Bytes
+
 github_token: "ghp_xxx"
 
 repos:
