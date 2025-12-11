@@ -154,7 +154,7 @@ func DefaultScrapingOptions() ScrapingOptions {
 // AdvancedScraper provides advanced scraping capabilities
 type AdvancedScraper struct {
 	client   *GithubClient
-	scorer   *PitfallScraper
+	scorer   *PitfallScorer
 	filter   *AdvancedIssueFilter
 	options  ScrapingOptions
 }
