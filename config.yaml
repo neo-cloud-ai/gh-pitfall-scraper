@@ -1,0 +1,69 @@
+# GitHub Token for API access (optional but recommended for higher rate limits)
+github_token: ""
+
+# Repository configurations
+repositories:
+  - name: "vllm-project/vllm"
+    enabled: true
+    keywords: ["performance", "gpu", "memory", "inference"]
+    min_score: 20.0
+    max_issues: 100
+
+  - name: "sgl-project/sglang"
+    enabled: true
+    keywords: ["performance", "gpu", "memory", "inference"]
+    min_score: 20.0
+    max_issues: 100
+
+  - name: "NVIDIA/TensorRT-LLM"
+    enabled: true
+    keywords: ["performance", "gpu", "cuda", "tensorrt"]
+    min_score: 20.0
+    max_issues: 100
+
+  - name: "microsoft/DeepSpeed"
+    enabled: true
+    keywords: ["distributed", "training", "performance", "memory"]
+    min_score: 20.0
+    max_issues: 100
+
+  - name: "pytorch/pytorch"
+    enabled: true
+    keywords: ["distributed", "performance", "cuda", "memory"]
+    min_score: 20.0
+    max_issues: 100
+
+  - name: "huggingface/transformers"
+    enabled: true
+    keywords: ["performance", "gpu", "memory", "training"]
+    min_score: 20.0
+    max_issues: 100
+
+  - name: "ray-project/ray"
+    enabled: true
+    keywords: ["distributed", "performance", "memory", "hanging"]
+    min_score: 20.0
+    max_issues: 100
+
+# Filtering configuration
+filter:
+  min_score: 20.0          # Minimum score to include issue
+  min_age: "30d"           # Minimum age (e.g., "7d", "30d", "90d")
+  max_age: ""              # Maximum age (empty = no limit)
+  required_state: "all"    # "open", "closed", or "all"
+  max_issues: 50           # Maximum issues per repository
+
+# Output configuration
+output:
+  format: "markdown"       # "markdown" or "json"
+  output_dir: "./output"   # Output directory
+  sort_by: "score"         # "score", "updated", "created"
+  include_raw: false       # Include raw issue content
+
+# Scoring weights (optional customization)
+scoring:
+  keyword_weight: 30       # Maximum points for keyword matching
+  pattern_weight: 25       # Maximum points for pattern matching
+  label_weight: 20         # Maximum points for label matching
+  status_weight: 10        # Maximum points for status
+  activity_weight: 15      # Maximum points for comments/reactions
